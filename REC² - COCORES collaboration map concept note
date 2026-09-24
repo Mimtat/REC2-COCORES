@@ -1,0 +1,40 @@
+REC² - COCORES collaboration map concept note
+Proposal for the project team
+We propose a living, searchable map that shows how the six RAP themes, six case studies, teams, researchers, and publications connect. 
+The first version would help colleagues find relevant work and contact one another. 
+With agreed data and research governance, later versions could examine how these connections change over time.
+
+[Risks and food for thought: DMP and what could leak? Shall I keep it public for now?]
+
+What colleagues would see
+
+The opening screen shows REUSE, ROT, REPLACE, REDUCE, RECYCLE and RESPECT in the project palette, alongside Case Studies 1–6.
+Selecting a theme or case study reveals its participating teams and people. 
+A person card shows their team, case studies, and chosen contact details. 
+Users can explore publications by author and keyword. 
+A time control can show when recorded relationships began or ended.
+
+How the information fits together
+
+Themes and case studies have many-to-many links. 
+A team contributes to at least one theme; each person belongs to one team and works on at least one case study.
+A publication can have multiple authors and keywords. 
+Authorship supplies a clear, attributable basis for showing collaboration; shared membership or shared case-study work can be displayed separately. 
+Links may carry start and end dates, and the interface should distinguish unknown dates from absent links.
+
+First release and research use
+For a pitch, we would show an interactive example with the SW group [What about Erbe and Dornack?]. 
+After participating teams check their entries, an initial live release could include names, affiliations, project involvement, and contact preferences. 
+Publications and dated relationships can follow as records become available.
+Research use would require a separately defined question, data provenance, and an interpretation protocol;
+a network connection by itself does not establish the quality or intensity of collaboration.
+
+Proposed participation and next decision
+We would ask each team to identify a contact who can review the case study and theme links, 
+then invite individuals to check their own profile and contact visibility.[Before collecting or publishing personal data, 
+the project should agree on who may view and edit it, how corrections work, 
+and whether any research analysis needs separate consent or review.] 
+The immediate decision requested is whether to pilot this map with a small set of 
+project members and validate the structure before wider collection.
+
+Next step --> Make nodes move
