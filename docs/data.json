@@ -1,0 +1,119 @@
+{
+  "themes": [
+    {
+      "theme_id": "R1",
+      "RAP": "RAP1",
+      "theme_name": "REUSE",
+      "color_hex": "#A5C711",
+      "light_hex": "#EEF4DA",
+      "description": null
+    },
+    {
+      "theme_id": "R2",
+      "RAP": "RAP2",
+      "theme_name": "ROT",
+      "color_hex": "#BD9D46",
+      "light_hex": "#F2EBDA",
+      "description": null
+    },
+    {
+      "theme_id": "R3",
+      "RAP": "RAP3",
+      "theme_name": "REPLACE",
+      "color_hex": "#9A9E7F",
+      "light_hex": "#E4E6DB",
+      "description": null
+    },
+    {
+      "theme_id": "R4",
+      "RAP": "RAP4",
+      "theme_name": "REDUCE",
+      "color_hex": "#25B7B9",
+      "light_hex": "#D3F1F1",
+      "description": null
+    },
+    {
+      "theme_id": "R5",
+      "RAP": "RAP5",
+      "theme_name": "RECYCLE",
+      "color_hex": "#2994A5",
+      "light_hex": "#D4EAED",
+      "description": null
+    },
+    {
+      "theme_id": "R6",
+      "RAP": "RAP6",
+      "theme_name": "RESPECT",
+      "color_hex": "#149559",
+      "light_hex": "#DCE9DD",
+      "description": null
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "C1",
+      "case_name": "Case Study 1",
+      "description": null,
+      "status": null,
+      "start_date": null,
+      "end_date": null
+    },
+    {
+      "case_id": "C2",
+      "case_name": "Case Study 2",
+      "description": null,
+      "status": null,
+      "start_date": null,
+      "end_date": null
+    },
+    {
+      "case_id": "C3",
+      "case_name": "Case Study 3",
+      "description": null,
+      "status": null,
+      "start_date": null,
+      "end_date": null
+    },
+    {
+      "case_id": "C4",
+      "case_name": "Case Study 4",
+      "description": null,
+      "status": null,
+      "start_date": null,
+      "end_date": null
+    },
+    {
+      "case_id": "C5",
+      "case_name": "Case Study 5",
+      "description": null,
+      "status": null,
+      "start_date": null,
+      "end_date": null
+    },
+    {
+      "case_id": "C6",
+      "case_name": "Case Study 6",
+      "description": null,
+      "status": null,
+      "start_date": null,
+      "end_date": null
+    }
+  ],
+  "teams": [],
+  "people": [],
+  "publications": [],
+  "keywords": [],
+  "links": {
+    "themeCase": [],
+    "teamTheme": [],
+    "teamCase": [],
+    "personCase": [],
+    "personTheme": [],
+    "publicationAuthor": [],
+    "publicationKeyword": [],
+    "publicationCase": [],
+    "publicationTheme": []
+  },
+  "publicationStatus": [],
+  "schemaVersion": 1
+}
