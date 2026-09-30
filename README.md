@@ -1,41 +1,29 @@
-# REC² collaboration map
+# Updated REC² map files
 
-The Excel workbook is the data source. The website reads `docs/data.json`, which is generated from the workbook. Themes, cases, links, teams, people, publications and keywords are no longer written inside JavaScript.
+Replace these paths in your existing GitHub repository with the files in this ZIP:
 
-## Quarterly update
+- materials/REC2_example_data.xlsx
+- scripts/build_data.py
+- docs/index.html
+- docs/app.js
+- docs/data.json
+- .github/workflows/github_pages.yml
 
-1. Edit `materials/REC2_data_template.xlsx`. Keep entity IDs stable.
-2. Add new teams, people, outputs, keywords or relationship rows. Enter `end_date` on a relationship when it stops; do not repeat unchanged rows each quarter. An end date is the first day that relationship is inactive.
-3. Add a row to `Publication Status` for every status change, with its effective date. Keep earlier rows to preserve the timeline.
-4. Commit the edited workbook to the repository's `main` branch. The workflow builds fresh JSON and deploys the website, once GitHub Pages has been configured to use GitHub Actions.
+The workflow now reads materials/REC2_example_data.xlsx. Keep GitHub Pages Source set to GitHub Actions. Commit all replacements together to main.
 
-The slider displays the state at the end of each quarter. Blank dates mean that the historical start is unknown; they should not be interpreted as evidence that a relationship existed in every earlier quarter. The blank template contains only the six RAP themes and six case labels. The project must enter and verify the actual links.
+The workbook contains seven sheets: Themes, Cases, Teams, Members, Collaboration stages, Publications, Keywords. Headers are in row 5; instructions above are ignored by the converter.
 
-## Local preview
+Use semicolons between multiple theme, author and keyword IDs. Publication records require at least one author, a publication year, and exactly one case ID. All referenced IDs must exist. Dates are yyyy-mm-dd; end dates are exclusive. A blank collaboration-stage end date means ongoing. Retain past stage rows when recording a change.
 
-Install Python and `openpyxl`, then run from the repository root:
+The map shows team-case involvement and its current stage at quarter end. Cases shown for members are inherited through their team's involvement; this does not establish individual participation or direct team-to-team collaboration. Coauthor connections are derived only from publication author IDs. A shared case alone is not displayed as confirmed coauthorship.
 
-```
+Publication collaboration start/end dates are stored separately from publication year. The current schema has no publication status field or author-specific participation dates. Members inherit institution and discipline from Teams. Individual dates are unknown where blank; do not interpret earlier timeline views as confirmed historical presence for undated records.
+
+Emails are excluded from generated website data. Only for an appropriately access-controlled internal deployment, use --include-internal-email with the converter.
+
+Local preview:
 python -m pip install openpyxl==3.1.5
-python scripts/build_data.py materials/REC2_data_template.xlsx docs/data.json
+python scripts/build_data.py materials/REC2_example_data.xlsx docs/data.json
 python -m http.server 8000 --directory docs
-```
 
-Open `http://localhost:8000`. Opening `index.html` directly as a local file may prevent the browser from loading `data.json`.
-
-## GitHub Pages setup
-
-In the repository's Pages settings, select **GitHub Actions** as the publishing source. The included workflow builds the JSON when the workbook or site files change on `main`, then deploys the `docs` folder. Review access and contact-data policy before enabling a public site. GitHub Pages deployment is not an internal access-control system merely because the repository is private.
-
-The build excludes all email addresses by default. A separate access-controlled internal deployment can include emails marked `Internal map` by calling the converter with `--include-internal-email`. It omits source notes from the published JSON.
-
-## Files
-
-- `materials/REC2_data_template.xlsx`: canonical project records and dated links.
-- `materials/REC2_concept_note.docx`: pitch note.
-- `materials/REC2_participant_questionnaire.docx`: draft data collection form.
-- `scripts/build_data.py`: Excel to JSON converter with ID validation.
-- `docs/index.html`, `docs/app.js`, `docs/data.json`: website and generated data.
-- `.github/workflows/github_pages.yml`: automated build and deployment.
-
-Theme colors approximate the RAP image provided for the project. No actual researcher identities, publications or theme-to-case assignments were supplied for the template.
+The supplied stage transitions and record counts were checked locally; live GitHub deployment and browser visual testing were not run here.
