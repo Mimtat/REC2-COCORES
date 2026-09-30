@@ -3,7 +3,7 @@
   const $ = id => document.getElementById(id);
   const canvas = $('canvas'), details = $('details'), search = $('search');
   const themeFilter = $('themeFilter'), caseFilter = $('caseFilter');
-  let data, view = 'overview', selection = null, asOf = '';
+  let data, view = 'graph', selection = null, asOf = '';
   let themes = [], cases = [], teams = [], people = [], pubs = [], keywords = [], quarters = [];
   const e = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const by = (list, key, id) => list.find(item => item[key] === id);
@@ -50,9 +50,44 @@
     render();
   }
   function item(kind,id,title,sub,color,dim=false) {return `<button class="item ${selection?.id===id?'active':''} ${dim?'dim':''}" data-kind="${kind}" data-id="${e(id)}"><span class="swatch" style="background:${e(color||'#687a7c')}"></span><span><span class="name">${e(title)}</span><span class="small" style="display:block">${e(sub)}</span></span></button>`;}
+  const layers = new Set(['theme','case','team','person','publication','keyword']);
+  function graph() {
+    const nodes=[], edges=[];
+    const add=(kind,id,label,color)=>nodes.push({kind,id,label,color,key:kind+':'+id});
+    const edge=(a,aid,b,bid,label)=>edges.push({a:a+':'+aid,b:b+':'+bid,label});
+    const cs=filteredCases(), caseIds=new Set(cs.map(c=>c.case_id));
+    const stages=data.collaborationStages.filter(x=>inside(x)&&caseIds.has(x.case_id));
+    const teamIds=new Set(stages.map(x=>x.team_id));
+    const ps=filteredPubs();
+    themes.filter(t=>cs.some(c=>caseThemes(c.case_id).includes(t.theme_id))).forEach(t=>add('theme',t.theme_id,t.theme_name,t.color_hex));
+    cs.forEach(c=>{add('case',c.case_id,c.case_name,'#687a7c');caseThemes(c.case_id).forEach(t=>edge('theme',t,'case',c.case_id,'Theme–case'));});
+    teams.filter(t=>visible(t)&&teamIds.has(t.team_id)).forEach(t=>add('team',t.team_id,t.team_name,'#6760a5'));
+    stages.forEach(x=>edge('team',x.team_id,'case',x.case_id,x.state+' · '+x.start_date+' → '+(x.end_date||'ongoing')));
+    const authorIds=new Set(ps.flatMap(p=>pubAuthors(p.publication_id)));
+    activePeople().filter(p=>teamIds.has(p.team_id)||authorIds.has(p.person_id)).forEach(p=>{add('person',p.person_id,p.full_name,'#a36c4c');edge('team',p.team_id,'person',p.person_id,'Team membership');});
+    const keywordIds=new Set(ps.flatMap(p=>pubKeywords(p.publication_id)));
+    keywords.filter(k=>keywordIds.has(k.keyword_id)).forEach(k=>add('keyword',k.keyword_id,k.keyword_label,'#b7822c'));
+    ps.forEach(p=>{add('publication',p.publication_id,p.title,'#386d9c');publicationCases(p.publication_id).forEach(c=>edge('case',c,'publication',p.publication_id,'Publication case'));pubAuthors(p.publication_id).forEach(a=>edge('person',a,'publication',p.publication_id,'Authorship'));pubKeywords(p.publication_id).forEach(k=>edge('publication',p.publication_id,'keyword',k,'Keyword'));});
+    const kinds=['theme','case','team','person','publication','keyword'].filter(k=>layers.has(k));
+    const ns=nodes.filter(n=>layers.has(n.kind)), map=new Map(ns.map(n=>[n.key,n]));
+    const height=Math.max(520,...kinds.map(k=>ns.filter(n=>n.kind===k).length*72+100));
+    kinds.forEach((k,col)=>ns.filter(n=>n.kind===k).forEach((n,row,all)=>{n.x=80+col*170;n.y=75+(row+.5)*(height-110)/Math.max(1,all.length);}));
+    const es=edges.filter(x=>map.has(x.a)&&map.has(x.b));
+    const selected=selection?selection.kind+':'+selection.id:null;
+    const neighbors=new Set([selected]);es.forEach(x=>{if(x.a===selected)neighbors.add(x.b);if(x.b===selected)neighbors.add(x.a);});
+    canvas.innerHTML=`<div class="rowhead"><div><h2>Network map</h2><p class="muted">Drag nodes to arrange. Select a node to explore its connections. Hover a line for its relationship.</p></div></div><div class="graph-layers">${['theme','case','team','person','publication','keyword'].map((k,i)=>`<label><input type="checkbox" data-layer="${k}" ${layers.has(k)?'checked':''}>${['Rs','Cs','Teams','Members','Publications','Keywords'][i]}</label>`).join('')}</div><p class="muted">Solid: theme–case / membership · Dashed: team stage · Blue: publication links. ${pubs.length?'':'No publications or keywords have been supplied yet.'}</p><div style="overflow:auto;border:1px solid #e1e8e6;border-radius:12px"><svg id="network-svg" role="img" aria-label="REC² relationship network" viewBox="0 0 ${Math.max(360,kinds.length*170)} ${height}" style="display:block;min-width:${Math.max(360,kinds.length*170)}px;width:100%;background:#fafcfb;touch-action:none">${kinds.map((k,i)=>`<text x="${80+i*170}" y="28" text-anchor="middle" font-size="12" fill="#637378">${e(k)}</text>`).join('')}${es.map((x,i)=>{const a=map.get(x.a),b=map.get(x.b);return `<line data-edge="${i}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="${x.label.startsWith('Publication')||x.label==='Authorship'||x.label==='Keyword'?'#386d9c':'#8b9a9b'}" stroke-width="${selected&&(x.a===selected||x.b===selected)?3:1.4}" opacity="${selected&&x.a!==selected&&x.b!==selected?.15:.65}" ${x.label.startsWith('Collaboration')?'stroke-dasharray="6 4"':''}><title>${e(x.label)}</title></line>`;}).join('')}${ns.map(n=>`<g data-node="${e(n.key)}" data-kind="${n.kind}" data-id="${e(n.id)}" transform="translate(${n.x} ${n.y})" tabindex="0" role="button" aria-label="${e(n.id+' '+n.label)}" style="cursor:grab;opacity:${selected&&!neighbors.has(n.key)?.25:1}"><title>${e(n.id+' · '+n.label)}</title><circle r="${n.kind==='theme'?21:16}" fill="${e(n.color)}" stroke="${selected===n.key?'#172b32':'white'}" stroke-width="3"/><text y="4" text-anchor="middle" fill="white" font-size="9">${e(n.id)}</text><text y="36" text-anchor="middle" fill="#26383d" font-size="10">${e(n.label.length>23?n.label.slice(0,21)+'…':n.label)}</text></g>`).join('')}</svg></div>`;
+    canvas.querySelectorAll('[data-layer]').forEach(c=>c.onchange=()=>{c.checked?layers.add(c.dataset.layer):layers.delete(c.dataset.layer);render();});
+    const svg=$('network-svg');let drag=null,moved=false;
+    svg.onpointerdown=event=>{const el=event.target.closest('[data-node]');if(!el)return;drag={el,n:map.get(el.dataset.node),x:event.clientX,y:event.clientY};moved=false;svg.setPointerCapture(event.pointerId);};
+    svg.onpointermove=event=>{if(!drag)return;if(Math.hypot(event.clientX-drag.x,event.clientY-drag.y)>4)moved=true;if(!moved)return;const point=new DOMPoint(event.clientX,event.clientY).matrixTransform(svg.getScreenCTM().inverse());drag.n.x=point.x;drag.n.y=point.y;drag.el.setAttribute('transform',`translate(${point.x} ${point.y})`);es.forEach((x,i)=>{const line=svg.querySelector(`[data-edge="${i}"]`),a=map.get(x.a),b=map.get(x.b);for(const [key,value]of Object.entries({x1:a.x,y1:a.y,x2:b.x,y2:b.y}))line.setAttribute(key,value);});};
+    svg.onpointerup=()=>{if(drag&&!moved)showDetail(drag.n.kind,drag.n.id);drag=null;};
+    svg.onpointercancel=()=>{drag=null;};
+    svg.querySelectorAll('[data-node]').forEach(el=>el.onkeydown=event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();showDetail(el.dataset.kind,el.dataset.id);}});
+  }
   function render() {
     document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.view===view)));
     const visibleCases=new Set(filteredCases().map(x=>x.case_id));
+    if(view==='graph') {graph();return;}
     if(view==='overview') {const ts=themes.filter(t=>!themeFilter.value||t.theme_id===themeFilter.value);
       canvas.innerHTML=`<div class="rowhead"><div><h2>Project overview</h2><span class="muted">Case studies and RAP themes can have many-to-many links.</span></div><span class="muted">${themes.length} themes · ${cases.length} cases</span></div><div class="map"><div><div class="column-head">RAP themes</div><div class="stack">${ts.map(t=>item('theme',t.theme_id,t.theme_name,`${t.RAP} · ${themeCases(t.theme_id).map(cn).join(', ')||'No case link entered'}`,t.color_hex,!!(q()&&!match(t.theme_name,t.RAP,...themeCases(t.theme_id).map(cn)))||!!(caseFilter.value&&!themeCases(t.theme_id).includes(caseFilter.value)))).join('')}</div></div><div><div class="column-head">Case studies</div><div class="stack">${cases.filter(visible).map(c=>item('case',c.case_id,c.case_name,caseThemes(c.case_id).map(tn).join(' · ')||'No theme link entered','#687a7c',!visibleCases.has(c.case_id))).join('')}</div></div></div>`;
     } else if(view==='network') {const ps=filteredPeople();const co=filteredPubs().filter(p=>pubAuthors(p.publication_id).length>1); const stages=data.collaborationStages.filter(x=>inside(x)&&(!caseFilter.value||x.case_id===caseFilter.value)&&(!themeFilter.value||caseThemes(x.case_id).includes(themeFilter.value))&&match(name(teams,'team_id','team_name',x.team_id),cn(x.case_id),x.state)); const stageCards=stages.map(x=>`<button class="card" data-kind="team" data-id="${e(x.team_id)}"><strong>${e(name(teams,'team_id','team_name',x.team_id))}</strong><p>${e(cn(x.case_id))}<br>${e(x.state)}<br>From ${e(x.start_date)}</p></button>`).join('');

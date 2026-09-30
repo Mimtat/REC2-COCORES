@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>REC² network</title>
+  <style>
+    :root{
+      --panel-w: 280px;
+      --pad: 12px;
+      --gap: 10px;
+      --radius: 10px;
+      --shadow: 0 2px 10px rgba(0,0,0,0.14);
+      --border: 1px solid rgba(0,0,0,0.10);
+      --font: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    #container {
+      width: 100vw;
+      height: 100vh;
+      background: #ffffff;
+    }
+
+    /* Geometric sidebar */
+    #sidebar {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 9999;
+      width: var(--panel-w);
+      display: grid;
+      gap: var(--gap);
+      pointer-events: auto;
+      font-family: var(--font);
+      color: #111;
+    }
+
+    .panel {
+      background: rgba(255,255,255,0.96);
+      border: var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: var(--pad);
+    }
+
+    .panel-title {
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.2px;
+      margin: 0 0 8px 0;
+    }
+
+    .controls-row{
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+
+    button {
+      height: 36px;
+      border-radius: 9px;
+      border: 1px solid rgba(0,0,0,0.16);
+      background: #fff;
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      user-select: none;
+    }
+
+    button:hover { background: rgba(0,0,0,0.03); }
+    button:active { transform: translateY(1px); }
+
+    .hint {
+      margin-top: 8px;
+      font-size: 12px;
+      opacity: 0.70;
+    }
+
+    .filters-grid{
+      display: grid;
+      gap: 6px;
+    }
+
+    label {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.2;
+      padding: 6px 8px;
+      border-radius: 8px;
+    }
+
+    label:hover { background: rgba(0,0,0,0.03); }
+
+    input[type="checkbox"]{
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      accent-color: #111;
+    }
+
+    .year-row{
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    #yearValue{
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      min-width: 44px;
+      text-align: right;
+    }
+
+    input[type="range"]{
+      width: 100%;
+      margin: 0;
+      height: 28px;
+    }
+
+    .small-note{
+      margin-top: 8px;
+      font-size: 12px;
+      opacity: 0.70;
+      line-height: 1.25;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="sidebar">
+    <div class="panel" id="controls">
+      <div class="panel-title">Layout</div>
+      <div class="controls-row">
+        <button id="toggle">⏸ Pause</button>
+        <button id="noverlap">✨ Space</button>
+       
+      </div>
+      <div class="hint">“Space” pauses and spreads clustered neighbors around connected nodes.</div>
+    </div>
+
+    <div class="panel" id="filters"><div id="rec-layers"></div>
+      <div class="panel-title">Filter</div>
+      <div class="filters-grid">
+        
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    <div class="panel" id="yearControl">
+      <div class="panel-title">Time</div>
+      <div class="year-row">
+        <div>Quarter</div>
+        <div id="yearValue">2026</div>
+      </div>
+      <input type="range" id="yearSlider" min="2026" max="2026" value="2026" step="1">
+      <div class="small-note">
+        Dates are evaluated at quarter end. Blank end dates mean ongoing. Click nodes for details.
+      </div>
+    </div>
+  </div>
+
+  <div id="container"></div><div id="info" class="panel" style="position:fixed;right:12px;top:12px;max-width:300px;font:13px system-ui">Select a node. Team–case edges describe involvement; publication authors establish coauthorship.</div>
+
+<script type="module">
+import Sigma from "https://cdn.jsdelivr.net/npm/sigma@3.0.2/+esm";
+import Graph from "https://cdn.jsdelivr.net/npm/graphology@0.25.4/+esm";
+import forceAtlas2 from "https://cdn.jsdelivr.net/npm/graphology-layout-forceatlas2/+esm";
+import noverlap from "https://cdn.jsdelivr.net/npm/graphology-layout-noverlap/+esm";
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+try {
+ const response=await fetch('./data.json');if(!response.ok)throw Error('Cannot load data.json');const d=await response.json();
+ const g=new Graph({multi:true,type:'undirected'});let counter=0;
+ const colors={Theme:'#149559',Case:'#687a7c',Team:'#6760a5',Member:'#a36c4c',Publication:'#386d9c',Keyword:'#b7822c'};
+ const add=(kind,id,label,record)=>{const i=counter++;g.addNode(id,{label:id+' · '+label,kind,record,x:Math.cos(i*2.4)*Math.sqrt(i+1)*20,y:Math.sin(i*2.4)*Math.sqrt(i+1)*20,size:kind==='Theme'?12:8,color:record.color_hex||colors[kind]});};
+ d.themes.forEach(x=>add('Theme',x.theme_id,x.theme_name,x));d.cases.forEach(x=>add('Case',x.case_id,x.case_name,x));d.teams.forEach(x=>add('Team',x.team_id,x.team_name,x));d.people.forEach(x=>add('Member',x.person_id,x.full_name,x));d.publications.forEach(x=>add('Publication',x.publication_id,x.title,x));d.keywords.forEach(x=>add('Keyword',x.keyword_id,x.keyword_label,x));
+ const connect=(a,b,label,record={})=>{if(g.hasNode(a)&&g.hasNode(b))g.addUndirectedEdgeWithKey('e'+counter++,a,b,{label,record,size:1.5,color:label==='Authorship'?'#386d9c':'#a0b2b1'});};
+ d.links.themeCase.forEach(x=>connect(x.theme_id,x.case_id,'Theme–case',x));d.collaborationStages.forEach(x=>connect(x.team_id,x.case_id,x.state,x));d.people.forEach(x=>connect(x.team_id,x.person_id,'Membership',x));
+ d.links.publicationAuthor.forEach(x=>connect(x.person_id,x.publication_id,'Authorship',x));d.links.publicationCase.forEach(x=>connect(x.publication_id,x.case_id,'Publication case',x));d.links.publicationKeyword.forEach(x=>connect(x.publication_id,x.keyword_id,'Keyword',x));
+ const years=[2026,new Date().getFullYear()];g.forEachNode((_,a)=>{for(const k of ['start_date','end_date','first_visible_date'])if(a.record[k])years.push(+a.record[k].slice(0,4));});g.forEachEdge((_,a)=>{for(const k of ['start_date','end_date'])if(a.record[k])years.push(+a.record[k].slice(0,4));});
+ const quarters=[];for(let y=Math.min(...years);y<=Math.max(...years);y++)for(let q=1;q<=4;q++)quarters.push({label:y+' Q'+q,date:new Date(Date.UTC(y,q*3,0)).toISOString().slice(0,10)});
+ const slider=document.getElementById('yearSlider');slider.min=0;slider.max=quarters.length-1;slider.value=Math.min(quarters.length-1,(new Date().getFullYear()-Math.min(...years))*4+Math.floor(new Date().getMonth()/3));
+ let date='',focus=null,active=new Set(Object.keys(colors)),running=true;
+ const inside=r=>(!r.start_date||r.start_date<=date)&&(!r.end_date||date<r.end_date);
+ const nodeVisible=id=>{const a=g.getNodeAttributes(id);return active.has(a.kind)&&inside(a.record)&&(!a.record.first_visible_date||a.record.first_visible_date<=date);};
+ const edgeVisible=id=>nodeVisible(g.source(id))&&nodeVisible(g.target(id))&&inside(g.getEdgeAttribute(id,'record'));
+ const renderer=new Sigma(g,document.getElementById('container'),{renderEdgeLabels:true,labelDensity:.4,labelRenderedSizeThreshold:6});
+ renderer.setSetting('nodeReducer',(id,a)=>({...a,hidden:!nodeVisible(id),color:focus&&id!==focus&&!g.neighbors(focus).includes(id)?'#d9dfdd':a.color,forceLabel:id===focus}));
+ renderer.setSetting('edgeReducer',(id,a)=>({...a,hidden:!edgeVisible(id),size:focus&&(g.source(id)===focus||g.target(id)===focus)?3:1,color:focus&&g.source(id)!==focus&&g.target(id)!==focus?'#edf0ee':a.color}));
+ const update=()=>{date=quarters[+slider.value].date;document.getElementById('yearValue').textContent=quarters[+slider.value].label;focus=null;document.getElementById('info').textContent='Select a node. Team–case edges describe involvement; publication authors establish coauthorship.';renderer.refresh();};slider.oninput=update;update();
+ document.getElementById('rec-layers').innerHTML=Object.keys(colors).map(k=>`<label><input type="checkbox" value="${k}" checked><span style="color:${colors[k]}">${k}</span></label>`).join('');
+ document.querySelectorAll('#rec-layers input').forEach(cb=>cb.onchange=()=>{cb.checked?active.add(cb.value):active.delete(cb.value);renderer.refresh();});
+ renderer.on('clickNode',({node})=>{focus=node;const a=g.getNodeAttributes(node),rows=[];g.forEachEdge(node,(id,e,source,target)=>{if(edgeVisible(id))rows.push(g.getNodeAttribute(source===node?target:source,'label')+' — '+e.label+(e.record.start_date?' ('+e.record.start_date+' → '+(e.record.end_date||'ongoing')+')':''));});document.getElementById('info').innerHTML='<strong>'+esc(a.label)+'</strong><p>'+esc(a.kind)+'</p>'+rows.map(x=>'<p>'+esc(x)+'</p>').join('')+(!rows.length?'<p>No visible connections at this date.</p>':'');renderer.refresh();});
+ renderer.on('clickStage',()=>{focus=null;renderer.refresh();});
+ const settings=forceAtlas2.inferSettings(g);settings.gravity=1;settings.scalingRatio=10;
+ document.getElementById('toggle').onclick=()=>{running=!running;document.getElementById('toggle').textContent=running?'⏸ Pause':'▶ Resume';};
+ document.getElementById('noverlap').onclick=()=>{running=false;document.getElementById('toggle').textContent='▶ Resume';noverlap.assign(g,{maxIterations:100,settings:{margin:8,ratio:1.5}});renderer.refresh();};
+ let ticks=0;function animate(){if(running){forceAtlas2.assign(g,{iterations:1,settings});renderer.refresh();if(++ticks>500){running=false;document.getElementById('toggle').textContent='▶ Resume';}}requestAnimationFrame(animate);}animate();
+} catch(error){document.getElementById('info').textContent=error.message;}
+</script></body></html>
