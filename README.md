@@ -27,3 +27,11 @@ python scripts/build_data.py materials/REC2_example_data.xlsx docs/data.json
 python -m http.server 8000 --directory docs
 
 The supplied stage transitions and record counts were checked locally; live GitHub deployment and browser visual testing were not run here.
+
+## Network views
+
+The homepage now includes a layered, draggable network. docs/gephi_network.html is a second viewer adapted from your Sigma/Gephi source, with moving layout, Pause/Space controls, pan/zoom, layer filters, quarterly dates, and click details. Both read docs/data.json generated from the workbook; no manual Gephi export is required. The Sigma viewer loads pinned dependencies from jsDelivr and therefore needs internet access. The homepage network works without those dependencies.
+
+Theme-case links, team-case stages, membership, authorship, publication-case links and keywords are distinct relationships. Team-case involvement does not establish direct collaboration between teams. Stage periods are end-exclusive. Keywords appear when referenced by publications in the homepage network; the Sigma viewer also shows unlinked keyword records. No sample publications or keywords have been invented. Node positions and circle sizes carry no analytical meaning.
+
+Upload all ZIP paths to the repository root, preserving folders. The extra network is accessible at /gephi_network.html on the published site; the homepage links to it. JavaScript syntax and data consistency were checked locally. The adapted viewers have not been visually verified in a browser.
