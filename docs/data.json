@@ -1,119 +1,532 @@
 {
   "themes": [
     {
-      "theme_id": "R1",
-      "RAP": "RAP1",
+      "theme_id": "R01",
       "theme_name": "REUSE",
-      "color_hex": "#A5C711",
-      "light_hex": "#EEF4DA",
-      "description": null
+      "RAP": "RAP1",
+      "color_hex": "#A5C711"
     },
     {
-      "theme_id": "R2",
-      "RAP": "RAP2",
+      "theme_id": "R02",
       "theme_name": "ROT",
-      "color_hex": "#BD9D46",
-      "light_hex": "#F2EBDA",
-      "description": null
+      "RAP": "RAP2",
+      "color_hex": "#BD9D46"
     },
     {
-      "theme_id": "R3",
-      "RAP": "RAP3",
+      "theme_id": "R03",
       "theme_name": "REPLACE",
-      "color_hex": "#9A9E7F",
-      "light_hex": "#E4E6DB",
-      "description": null
+      "RAP": "RAP3",
+      "color_hex": "#9A9E7F"
     },
     {
-      "theme_id": "R4",
-      "RAP": "RAP4",
+      "theme_id": "R04",
       "theme_name": "REDUCE",
-      "color_hex": "#25B7B9",
-      "light_hex": "#D3F1F1",
-      "description": null
+      "RAP": "RAP4",
+      "color_hex": "#25B7B9"
     },
     {
-      "theme_id": "R5",
-      "RAP": "RAP5",
+      "theme_id": "R05",
       "theme_name": "RECYCLE",
-      "color_hex": "#2994A5",
-      "light_hex": "#D4EAED",
-      "description": null
+      "RAP": "RAP5",
+      "color_hex": "#2994A5"
     },
     {
-      "theme_id": "R6",
-      "RAP": "RAP6",
+      "theme_id": "R06",
       "theme_name": "RESPECT",
-      "color_hex": "#149559",
-      "light_hex": "#DCE9DD",
-      "description": null
+      "RAP": "ORAP6",
+      "color_hex": "#149559"
     }
   ],
   "cases": [
     {
-      "case_id": "C1",
-      "case_name": "Case Study 1",
-      "description": null,
-      "status": null,
-      "start_date": null,
+      "case_id": "C01",
+      "case_name": "Use of van der Waals materials",
+      "theme_ids": "R01; R06"
+    },
+    {
+      "case_id": "C02",
+      "case_name": "Dissolvable transistors",
+      "theme_ids": "R01; R06"
+    },
+    {
+      "case_id": "C03",
+      "case_name": "Degradable ECG electrodes",
+      "theme_ids": "R02; R06"
+    },
+    {
+      "case_id": "C04",
+      "case_name": "Self-sustained sensors",
+      "theme_ids": "R03; R06"
+    },
+    {
+      "case_id": "C05",
+      "case_name": "Bark beetle monitoring",
+      "theme_ids": "R04; R06"
+    },
+    {
+      "case_id": "C06",
+      "case_name": "Intermittent energy supply",
+      "theme_ids": "R05; R06"
+    }
+  ],
+  "teams": [
+    {
+      "team_id": "T01",
+      "team_name": "Team Wagenknecht",
+      "institution": "Institute of Sociology",
+      "discipline": "Sociology",
+      "start_date": "2026-01-01",
       "end_date": null
     },
     {
-      "case_id": "C2",
-      "case_name": "Case Study 2",
-      "description": null,
-      "status": null,
-      "start_date": null,
+      "team_id": "T02",
+      "team_name": "Team Dornack",
+      "institution": "Institute of Waste Management and Circular Economy",
+      "discipline": "Waste Management",
+      "start_date": "2026-01-01",
       "end_date": null
     },
     {
-      "case_id": "C3",
-      "case_name": "Case Study 3",
-      "description": null,
-      "status": null,
-      "start_date": null,
-      "end_date": null
-    },
-    {
-      "case_id": "C4",
-      "case_name": "Case Study 4",
-      "description": null,
-      "status": null,
-      "start_date": null,
-      "end_date": null
-    },
-    {
-      "case_id": "C5",
-      "case_name": "Case Study 5",
-      "description": null,
-      "status": null,
-      "start_date": null,
-      "end_date": null
-    },
-    {
-      "case_id": "C6",
-      "case_name": "Case Study 6",
-      "description": null,
-      "status": null,
-      "start_date": null,
+      "team_id": "T03",
+      "team_name": "Team Erbe",
+      "institution": "Institute of Semiconductors and Microsystems (IHM)",
+      "discipline": "Nanostructures for Electronics and Sensors",
+      "start_date": "2026-01-01",
       "end_date": null
     }
   ],
-  "teams": [],
-  "people": [],
+  "people": [
+    {
+      "person_id": "T01P01",
+      "full_name": "Susann Wagenknecht",
+      "role": "PI",
+      "team_id": "T01",
+      "email": null,
+      "start_date": null,
+      "end_date": null,
+      "institution": "Institute of Sociology",
+      "discipline": "Sociology"
+    },
+    {
+      "person_id": "T01P02",
+      "full_name": "Nona Schulte-Roemer",
+      "role": "Postdoc Researcher",
+      "team_id": "T01",
+      "email": null,
+      "start_date": null,
+      "end_date": null,
+      "institution": "Institute of Sociology",
+      "discipline": "Sociology"
+    },
+    {
+      "person_id": "T01P03",
+      "full_name": "Maryam Tatari",
+      "role": "Postdoc Researcher",
+      "team_id": "T01",
+      "email": null,
+      "start_date": null,
+      "end_date": null,
+      "institution": "Institute of Sociology",
+      "discipline": "Sociology"
+    },
+    {
+      "person_id": "T02P01",
+      "full_name": "Christina Dornack",
+      "role": "PI",
+      "team_id": "T02",
+      "email": null,
+      "start_date": null,
+      "end_date": null,
+      "institution": "Institute of Waste Management and Circular Economy",
+      "discipline": "Waste Management"
+    },
+    {
+      "person_id": "T02P02",
+      "full_name": "Karoline Owusu-Sekyere",
+      "role": "Postdoc Researcher",
+      "team_id": "T02",
+      "email": null,
+      "start_date": null,
+      "end_date": null,
+      "institution": "Institute of Waste Management and Circular Economy",
+      "discipline": "Waste Management"
+    },
+    {
+      "person_id": "T02P03",
+      "full_name": "Harshali Yeram",
+      "role": "PhD researcher",
+      "team_id": "T02",
+      "email": null,
+      "start_date": null,
+      "end_date": null,
+      "institution": "Institute of Waste Management and Circular Economy",
+      "discipline": "Waste Management"
+    },
+    {
+      "person_id": "T03P01",
+      "full_name": "Artur Erbe",
+      "role": "PI",
+      "team_id": "T03",
+      "email": null,
+      "start_date": null,
+      "end_date": null,
+      "institution": "Institute of Semiconductors and Microsystems (IHM)",
+      "discipline": "Nanostructures for Electronics and Sensors"
+    },
+    {
+      "person_id": "T03P02",
+      "full_name": "Peter Zahn",
+      "role": "Postdoc Researcher",
+      "team_id": "T03",
+      "email": null,
+      "start_date": null,
+      "end_date": null,
+      "institution": "Institute of Semiconductors and Microsystems (IHM)",
+      "discipline": "Nanostructures for Electronics and Sensors"
+    }
+  ],
   "publications": [],
   "keywords": [],
   "links": {
-    "themeCase": [],
-    "teamTheme": [],
-    "teamCase": [],
-    "personCase": [],
+    "themeCase": [
+      {
+        "theme_id": "R01",
+        "case_id": "C01"
+      },
+      {
+        "theme_id": "R06",
+        "case_id": "C01"
+      },
+      {
+        "theme_id": "R01",
+        "case_id": "C02"
+      },
+      {
+        "theme_id": "R06",
+        "case_id": "C02"
+      },
+      {
+        "theme_id": "R02",
+        "case_id": "C03"
+      },
+      {
+        "theme_id": "R06",
+        "case_id": "C03"
+      },
+      {
+        "theme_id": "R03",
+        "case_id": "C04"
+      },
+      {
+        "theme_id": "R06",
+        "case_id": "C04"
+      },
+      {
+        "theme_id": "R04",
+        "case_id": "C05"
+      },
+      {
+        "theme_id": "R06",
+        "case_id": "C05"
+      },
+      {
+        "theme_id": "R05",
+        "case_id": "C06"
+      },
+      {
+        "theme_id": "R06",
+        "case_id": "C06"
+      }
+    ],
+    "teamCase": [
+      {
+        "team_id": "T01",
+        "case_id": "C03",
+        "start_date": "2026-09-14",
+        "end_date": null,
+        "state": "Collaboration initiation"
+      },
+      {
+        "team_id": "T01",
+        "case_id": "C06",
+        "start_date": "2026-06-15",
+        "end_date": "2026-07-15",
+        "state": "Collaboration initiation"
+      },
+      {
+        "team_id": "T02",
+        "case_id": "C06",
+        "start_date": "2026-06-15",
+        "end_date": "2026-07-15",
+        "state": "Collaboration initiation"
+      },
+      {
+        "team_id": "T03",
+        "case_id": "C03",
+        "start_date": "2026-09-14",
+        "end_date": null,
+        "state": "Collaboration initiation"
+      },
+      {
+        "team_id": "T01",
+        "case_id": "C06",
+        "start_date": "2026-07-15",
+        "end_date": null,
+        "state": "Collaboration data collection"
+      },
+      {
+        "team_id": "T02",
+        "case_id": "C06",
+        "start_date": "2026-07-15",
+        "end_date": null,
+        "state": "Collaboration data collection"
+      }
+    ],
+    "teamTheme": [
+      {
+        "team_id": "T01",
+        "theme_id": "R02",
+        "start_date": "2026-09-14",
+        "end_date": null
+      },
+      {
+        "team_id": "T01",
+        "theme_id": "R06",
+        "start_date": "2026-09-14",
+        "end_date": null
+      },
+      {
+        "team_id": "T01",
+        "theme_id": "R05",
+        "start_date": "2026-06-15",
+        "end_date": "2026-07-15"
+      },
+      {
+        "team_id": "T01",
+        "theme_id": "R06",
+        "start_date": "2026-06-15",
+        "end_date": "2026-07-15"
+      },
+      {
+        "team_id": "T02",
+        "theme_id": "R05",
+        "start_date": "2026-06-15",
+        "end_date": "2026-07-15"
+      },
+      {
+        "team_id": "T02",
+        "theme_id": "R06",
+        "start_date": "2026-06-15",
+        "end_date": "2026-07-15"
+      },
+      {
+        "team_id": "T03",
+        "theme_id": "R02",
+        "start_date": "2026-09-14",
+        "end_date": null
+      },
+      {
+        "team_id": "T03",
+        "theme_id": "R06",
+        "start_date": "2026-09-14",
+        "end_date": null
+      },
+      {
+        "team_id": "T01",
+        "theme_id": "R05",
+        "start_date": "2026-07-15",
+        "end_date": null
+      },
+      {
+        "team_id": "T01",
+        "theme_id": "R06",
+        "start_date": "2026-07-15",
+        "end_date": null
+      },
+      {
+        "team_id": "T02",
+        "theme_id": "R05",
+        "start_date": "2026-07-15",
+        "end_date": null
+      },
+      {
+        "team_id": "T02",
+        "theme_id": "R06",
+        "start_date": "2026-07-15",
+        "end_date": null
+      }
+    ],
+    "personCase": [
+      {
+        "person_id": "T01P01",
+        "case_id": "C03",
+        "start_date": "2026-09-14",
+        "end_date": null,
+        "basis": "team involvement"
+      },
+      {
+        "person_id": "T01P02",
+        "case_id": "C03",
+        "start_date": "2026-09-14",
+        "end_date": null,
+        "basis": "team involvement"
+      },
+      {
+        "person_id": "T01P03",
+        "case_id": "C03",
+        "start_date": "2026-09-14",
+        "end_date": null,
+        "basis": "team involvement"
+      },
+      {
+        "person_id": "T01P01",
+        "case_id": "C06",
+        "start_date": "2026-06-15",
+        "end_date": "2026-07-15",
+        "basis": "team involvement"
+      },
+      {
+        "person_id": "T01P02",
+        "case_id": "C06",
+        "start_date": "2026-06-15",
+        "end_date": "2026-07-15",
+        "basis": "team involvement"
+      },
+      {
+        "person_id": "T01P03",
+        "case_id": "C06",
+        "start_date": "2026-06-15",
+        "end_date": "2026-07-15",
+        "basis": "team involvement"
+      },
+      {
+        "person_id": "T02P01",
+        "case_id": "C06",
+        "start_date": "2026-06-15",
+        "end_date": "2026-07-15",
+        "basis": "team involvement"
+      },
+      {
+        "person_id": "T02P02",
+        "case_id": "C06",
+        "start_date": "2026-06-15",
+        "end_date": "2026-07-15",
+        "basis": "team involvement"
+      },
+      {
+        "person_id": "T02P03",
+        "case_id": "C06",
+        "start_date": "2026-06-15",
+        "end_date": "2026-07-15",
+        "basis": "team involvement"
+      },
+      {
+        "person_id": "T03P01",
+        "case_id": "C03",
+        "start_date": "2026-09-14",
+        "end_date": null,
+        "basis": "team involvement"
+      },
+      {
+        "person_id": "T03P02",
+        "case_id": "C03",
+        "start_date": "2026-09-14",
+        "end_date": null,
+        "basis": "team involvement"
+      },
+      {
+        "person_id": "T01P01",
+        "case_id": "C06",
+        "start_date": "2026-07-15",
+        "end_date": null,
+        "basis": "team involvement"
+      },
+      {
+        "person_id": "T01P02",
+        "case_id": "C06",
+        "start_date": "2026-07-15",
+        "end_date": null,
+        "basis": "team involvement"
+      },
+      {
+        "person_id": "T01P03",
+        "case_id": "C06",
+        "start_date": "2026-07-15",
+        "end_date": null,
+        "basis": "team involvement"
+      },
+      {
+        "person_id": "T02P01",
+        "case_id": "C06",
+        "start_date": "2026-07-15",
+        "end_date": null,
+        "basis": "team involvement"
+      },
+      {
+        "person_id": "T02P02",
+        "case_id": "C06",
+        "start_date": "2026-07-15",
+        "end_date": null,
+        "basis": "team involvement"
+      },
+      {
+        "person_id": "T02P03",
+        "case_id": "C06",
+        "start_date": "2026-07-15",
+        "end_date": null,
+        "basis": "team involvement"
+      }
+    ],
     "personTheme": [],
     "publicationAuthor": [],
     "publicationKeyword": [],
     "publicationCase": [],
     "publicationTheme": []
   },
+  "collaborationStages": [
+    {
+      "team_id": "T01",
+      "case_id": "C03",
+      "start_date": "2026-09-14",
+      "end_date": null,
+      "state": "Collaboration initiation"
+    },
+    {
+      "team_id": "T01",
+      "case_id": "C06",
+      "start_date": "2026-06-15",
+      "end_date": "2026-07-15",
+      "state": "Collaboration initiation"
+    },
+    {
+      "team_id": "T02",
+      "case_id": "C06",
+      "start_date": "2026-06-15",
+      "end_date": "2026-07-15",
+      "state": "Collaboration initiation"
+    },
+    {
+      "team_id": "T03",
+      "case_id": "C03",
+      "start_date": "2026-09-14",
+      "end_date": null,
+      "state": "Collaboration initiation"
+    },
+    {
+      "team_id": "T01",
+      "case_id": "C06",
+      "start_date": "2026-07-15",
+      "end_date": null,
+      "state": "Collaboration data collection"
+    },
+    {
+      "team_id": "T02",
+      "case_id": "C06",
+      "start_date": "2026-07-15",
+      "end_date": null,
+      "state": "Collaboration data collection"
+    }
+  ],
   "publicationStatus": [],
   "schemaVersion": 1
 }
